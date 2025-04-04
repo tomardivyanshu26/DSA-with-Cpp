@@ -1,0 +1,55 @@
+✅ Intuition Behind the Approach
+
+We want to count the number of subarrays with exactly k distinct integers.
+
+Now, it's hard to directly count exactly k distincts. But it's easier to count:
+
+subarrays with at most k distinct elements
+
+subarrays with at most k - 1 distinct elements
+
+✅ Approach
+We use two pointers: left and right.
+
+Expand right to include new elements.
+
+If the number of distinct elements exceeds k, move left to shrink the window.
+
+For each valid window (where distinct count ≤ k), the number of subarrays ending at right is (right - left + 1).
+
+✅ Complexity
+Time complexity:
+    Using unordered_map: O(n)
+    Using map: O(n log k)
+Space complexity:
+    We use a map to store up to k elements => O(k)
+
+✅ Code:
+
+
+class Solution {
+public:
+    int atMostKDistinct(vector<int>& nums, int k) {
+        int l = 0, r = 0, count = 0;
+        unordered_map<int, int> mpp;
+        for (r = 0; r < nums.size(); r++) 
+        {
+            mpp[nums[r]]++;
+            while (mpp.size() > k) 
+            {
+                mpp[nums[l]]--;
+                if (mpp[nums[l]] == 0) 
+                {
+                    mpp.erase(nums[l]);
+                }
+                l++;
+            }
+            count += (r - l + 1);
+        }
+        return count;
+    }
+    int subarraysWithKDistinct(vector<int>& nums, int k) 
+    {
+        return atMostKDistinct(nums, k) - atMostKDistinct(nums, k - 1);
+    }
+};
