@@ -1,0 +1,27 @@
+Approach - Fractional Knapsack problem using a Greedy Algorithm with a Priority Queue (Max Heap):
+
+ ->>>>>>>->>>>->>>>>->>>>->>>>->>>>
+
+double fractionalKnapsack(vector<int>& val, vector<int>& wt, int capacity) {
+        double ans;
+        priority_queue<pair<double,pair<double,double>>>pq;
+        for(int i=0;i<val.size();i++)
+        {
+            pq.push({val[i]/wt[i],{val[i],wt[i]}});
+        }
+        while(!pq.empty()&&capacity>0)
+        {
+            auto it =pq.top();
+            pq.pop();
+            double num=it.second.first;
+            double cost=it.second.second;
+            if(cost > capacity)
+            {
+                ans+=(num/cost)*capacity;
+                break;
+            }
+            ans+=num;
+            capacity-=cost;
+        }
+        return ans;
+    }
